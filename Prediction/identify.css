@@ -1,0 +1,27 @@
+
+form{
+  display: flex;
+  flex-direction: row;
+ border-radius: 20px;
+ box-shadow: -1px 8px 5px -1px rgba(0,0,0,0.75);
+-webkit-box-shadow: -1px 8px 5px -1px rgba(0,0,0,0.75);
+-moz-box-shadow: -1px 8px 5px -1px rgba(0,0,0,0.75);
+  background-color: rgb(10, 216, 93);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.tt{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+h1{
+    text-align: center;
+}
+
+h2{
+    text-align: center;
+}
