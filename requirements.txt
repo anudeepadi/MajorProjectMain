@@ -1,0 +1,17 @@
+jupyter
+scikit-learn
+scipy
+pandas
+pandas-datareader
+matplotlib
+pillow
+tqdm
+requests
+h5py
+pyyaml
+flask
+boto3
+tensorflow
+bayesian-optimization
+gym
+kaggle
