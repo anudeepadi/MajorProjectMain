@@ -4,6 +4,7 @@ import numpy as np
 from tensorflow import keras
 from fastapi import FastAPI, UploadFile, File
 import argparse
+from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 
@@ -48,6 +49,14 @@ def handle_invalid_path(filepath):
 
     return os.path.expanduser(filepath)
 
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/predict")
 async def predict_disease(image: str):
