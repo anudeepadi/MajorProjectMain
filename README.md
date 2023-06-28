@@ -46,9 +46,8 @@ uvicorn main:app --reload
 8. Make sure to follow the necessary steps and requirements to run the project successfully.
 
 ### Project done as a part of Major Project Computer Science and Engineering(CSE) Coursework at Hyderabad Institute of Technology and Management(HITAM), Hyderabad. By the following students:
-1. [Adiraju Venkata Anudeep](4th Year CSE)
-2. [Adertha Elzabeth](4th Year CSE)
-3. [Bangaru Nihal](4th Year CSE)
-4. [Kala Aditya](4th Year CSE)
+1. Adiraju Venkata Anudeep (4th Year CSE)
+2. Bangaru Nihal (4th Year CSE)
+3. Kala Aditya (4th Year CSE)
 
 #### If you want to contribute to this project, please feel free to do so. We would love to see your contributions.
