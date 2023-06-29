@@ -5,8 +5,6 @@ from tensorflow import keras
 from fastapi import FastAPI, UploadFile, File
 import argparse
 from fastapi.middleware.cors import CORSMiddleware
-import io
-
 app = FastAPI()
 
 ## Chatbot
@@ -58,6 +56,8 @@ def get_crop_info(prediction_result: str):
     # }
 
     # format the prompt
+    
+
     llm1 = OpenAI(model_name="text-ada-001", n=2, best_of=2)
 
     result = llm1(about)
@@ -117,8 +117,8 @@ app.add_middleware(
 )
 
 @app.post("/predict")
-async def predict_disease(image: UploadFile = File(...)):
-    # Save the uploaded file
+async def predict_disease(image: str):
+    # Save the uploaded files
     model_path = r"plant_disease_detection.h5"
     categories_path = r"categories.json"
 
@@ -128,13 +128,10 @@ async def predict_disease(image: UploadFile = File(...)):
     # Load model
     model = load_model(model_path)
 
-    # Read the image file
-    contents = await image.read()
-
-    # Convert the image to numpy array
-    img = keras.preprocessing.image.img_to_array(
+    # Load image
+    img = np.array(
         keras.preprocessing.image.load_img(
-            io.BytesIO(contents), target_size=(224, 224)
+            image, target_size=(224, 224)
         )
     )
 
