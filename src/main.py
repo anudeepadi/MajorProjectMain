@@ -5,15 +5,10 @@ from tensorflow import keras
 from fastapi import FastAPI, UploadFile, File
 import argparse
 from fastapi.middleware.cors import CORSMiddleware
-app = FastAPI()
-
-## Chatbot
-
-import openai
-import os
-import os
+from typing import Literal
+from pydantic import BaseModel, Field
 from getpass import getpass
-from fastapi import FastAPI
+import openai
 from langchain.agents import load_tools
 from langchain.agents import initialize_agent
 from langchain.agents import AgentType
@@ -24,37 +19,111 @@ from langchain.chat_models import ChatOpenAI
 
 app = FastAPI()
 
-os.environ['OPENAI_API_KEY'] = ""
-os.environ["WOLFRAM_ALPHA_APPID"] = ""
+os.environ['OPENAI_API_KEY'] = "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"
+os.environ["WOLFRAM_ALPHA_APPID"] = "79UWTQ-Y5RVEG9A7Y"
 
-# @app.get("/crop-info/{prediction_result}")
-# def get_crop_info(prediction_result: str):
-#     # Set the OpenAI and Wolfram Alpha API keys
+@app.get("/crop-info/{prediction_result}")
+def get_crop_info(prediction_result: str):
 
-#     # Create the prompt strings
-#     about = f"Please tell me about {prediction_result} crop, it's diseases and how to prevent them."
+    # Create the prompt strings
+    about = f"Please tell me about {prediction_result} crop"
+    caused = f"How is {prediction_result} crop diseased caused?"
+    cure = f"What is the cure for {prediction_result} crop diseased?"
 
     # Use Langchain for the query engine
-    # llm = ChatOpenAI(temperature=0)
+    llm = ChatOpenAI(temperature=0)
+
+    # Define tools for the agent
+    tools = load_tools(['wikipedia', 'wolfram-alpha'], llm=llm)
+
+    # Set up conversation memory
+    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+
+    # Initialize the agent
+    agent = initialize_agent(tools, llm, agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION,
+                             verbose=True, memory=memory, max_iterations=6)
+
+    # Get LLM response for crop information
+    try:
+        info = agent.run(input=about)
+    except Exception as e:
+        info = str(e)
+        if info.startswith("Could not parse LLM output: `"):
+            info = info.removeprefix("Could not parse LLM output: `").removesuffix("`")
+        else:
+            raise Exception(str(e))
+
+    # Get LLM response for crop disease causes
+    try:
+        cause = agent.run(input=caused)
+    except Exception as e:
+        cause = str(e)
+        if cause.startswith("Could not parse LLM output: `"):
+            cause = info.removeprefix("Could not parse LLM output: `").removesuffix("`")
+        else:
+            raise Exception(str(e))
+
+    # Get LLM response for crop disease cure
+    try:
+        precaution = agent.run(input=cure)
+    except Exception as e:
+        precaution = str(e)
+        if precaution.startswith("Could not parse LLM output: `"):
+            precaution = info.removeprefix("Could not parse LLM output: `").removesuffix("`")
+        else:
+            raise Exception(str(e))
+
+    response = {
+        "crop_info": info,
+        "crop_disease_causes": cause,
+        "crop_disease_cure": precaution
+    }
+
+    return response
+
+system_prompt = "You are a comic book assistant. You reply to the user's question strictly from the perspective of a comic book assistant. If the question is not related to comic books, you politely decline to answer."
 
 
-    # # Define tools for the agent
-    # tools = load_tools(['wikipedia', 'wolfram-alpha'], llm=llm)
+class Conversation(BaseModel):
+    role: Literal["assistant", "user"]
+    content: str
 
-    # # Set up conversation memory
-    # memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
-    # # Initialize the agent
-    # agent = initialize_agent(tools, llm, agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION,
-    #                          verbose=True, memory=memory, max_iterations=6)
+class ConversationHistory(BaseModel):
+    history: list[Conversation] = Field(
+        example=[
+            {
+                "role": "assistant",
+                "content": "Hello, I'm a Plant Disease Assistant. I can help you identify plant diseases. What plant are you looking at?",
+            },
+            {"role": "user", "content": "I'm looking at a tomato plant."},
+        ]
+    )
 
-    # # Get LLM response for crop information
 
-    # info = agent.run(input=about)
-    # # Print the observation page apple and summary
-    # return {
-    #     "crop_info": info
-    # }
+@app.get("/")
+async def health_check():
+    return {"status": "OK!"}
+
+
+@app.post("/chat")
+async def llm_response(history: ConversationHistory) -> dict:
+    # Step 0: Receive the API payload as a dictionary
+    history = history.dict()
+
+    # Step 1: Initialize messages with a system prompt and conversation history
+    messages = [{"role": "system", "content": system_prompt}, *history["history"]]
+
+    # Step 2: Generate a response
+    llm_response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo", messages=messages
+    )
+
+    # Step 3: Return the generated response and the token usage
+    return {
+        "message": llm_response.choices[0]["message"],
+        "token_usage": llm_response["usage"],
+    }
 
 def load_categories(file_path):
     with open(file_path) as file:
