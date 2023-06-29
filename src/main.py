@@ -24,14 +24,15 @@ from langchain.chat_models import ChatOpenAI
 
 app = FastAPI()
 
-@app.get("/crop-info/{prediction_result}")
-def get_crop_info(prediction_result: str):
-    # Set the OpenAI and Wolfram Alpha API keys
-    os.environ['OPENAI_API_KEY'] = ""
-    os.environ["WOLFRAM_ALPHA_APPID"] = ""
+os.environ['OPENAI_API_KEY'] = "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"
+os.environ["WOLFRAM_ALPHA_APPID"] = "79UWTQ-Y5RVEG9A7Y"
 
-    # Create the prompt strings
-    about = f"Please tell me about {prediction_result} crop, it's diseases and how to prevent them."
+# @app.get("/crop-info/{prediction_result}")
+# def get_crop_info(prediction_result: str):
+#     # Set the OpenAI and Wolfram Alpha API keys
+
+#     # Create the prompt strings
+#     about = f"Please tell me about {prediction_result} crop, it's diseases and how to prevent them."
 
     # Use Langchain for the query engine
     # llm = ChatOpenAI(temperature=0)
@@ -54,17 +55,6 @@ def get_crop_info(prediction_result: str):
     # return {
     #     "crop_info": info
     # }
-
-    # format the prompt
-    
-
-    llm1 = OpenAI(model_name="text-ada-001", n=2, best_of=2)
-
-    result = llm1(about)
-
-    return {
-        "crop_info": result
-    }
 
 def load_categories(file_path):
     with open(file_path) as file:
@@ -117,7 +107,7 @@ app.add_middleware(
 )
 
 @app.post("/predict")
-async def predict_disease(image: str):
+async def predict_disease(image: str, run_inference: bool):
     # Save the uploaded files
     model_path = r"plant_disease_detection.h5"
     categories_path = r"categories.json"
@@ -138,5 +128,10 @@ async def predict_disease(image: str):
     # Get prediction
     name, disease = get_prediction(model, categories, img)
 
+    if run_inference == True:
+        llm = OpenAI(model_name="text-ada-001", n=2, best_of=2)
+        question = f"Please tell me about {disease} disease in plants, it's symptoms and how to prevent it."
+        result = llm(question)
+        return {"disease": disease, "name": name, "inference": result}
     # Return prediction
     return {"disease": disease, "name": name}
