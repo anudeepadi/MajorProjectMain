@@ -24,8 +24,8 @@ from langchain.chat_models import ChatOpenAI
 
 app = FastAPI()
 
-os.environ['OPENAI_API_KEY'] = "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"
-os.environ["WOLFRAM_ALPHA_APPID"] = "79UWTQ-Y5RVEG9A7Y"
+os.environ['OPENAI_API_KEY'] = ""
+os.environ["WOLFRAM_ALPHA_APPID"] = ""
 
 # @app.get("/crop-info/{prediction_result}")
 # def get_crop_info(prediction_result: str):
