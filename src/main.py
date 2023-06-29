@@ -5,8 +5,66 @@ from tensorflow import keras
 from fastapi import FastAPI, UploadFile, File
 import argparse
 from fastapi.middleware.cors import CORSMiddleware
+import io
+
 app = FastAPI()
 
+## Chatbot
+
+import openai
+import os
+import os
+from getpass import getpass
+from fastapi import FastAPI
+from langchain.agents import load_tools
+from langchain.agents import initialize_agent
+from langchain.agents import AgentType
+from langchain.llms import OpenAI
+from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
+from langchain.memory import ConversationBufferMemory
+from langchain.chat_models import ChatOpenAI
+
+app = FastAPI()
+
+@app.get("/crop-info/{prediction_result}")
+def get_crop_info(prediction_result: str):
+    # Set the OpenAI and Wolfram Alpha API keys
+    os.environ['OPENAI_API_KEY'] = ""
+    os.environ["WOLFRAM_ALPHA_APPID"] = ""
+
+    # Create the prompt strings
+    about = f"Please tell me about {prediction_result} crop, it's diseases and how to prevent them."
+
+    # Use Langchain for the query engine
+    # llm = ChatOpenAI(temperature=0)
+
+
+    # # Define tools for the agent
+    # tools = load_tools(['wikipedia', 'wolfram-alpha'], llm=llm)
+
+    # # Set up conversation memory
+    # memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+
+    # # Initialize the agent
+    # agent = initialize_agent(tools, llm, agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION,
+    #                          verbose=True, memory=memory, max_iterations=6)
+
+    # # Get LLM response for crop information
+
+    # info = agent.run(input=about)
+    # # Print the observation page apple and summary
+    # return {
+    #     "crop_info": info
+    # }
+
+    # format the prompt
+    llm1 = OpenAI(model_name="text-ada-001", n=2, best_of=2)
+
+    result = llm1(about)
+
+    return {
+        "crop_info": result
+    }
 
 def load_categories(file_path):
     with open(file_path) as file:
@@ -59,8 +117,8 @@ app.add_middleware(
 )
 
 @app.post("/predict")
-async def predict_disease(image: str):
-    # Save the uploaded files
+async def predict_disease(image: UploadFile = File(...)):
+    # Save the uploaded file
     model_path = r"plant_disease_detection.h5"
     categories_path = r"categories.json"
 
@@ -70,10 +128,13 @@ async def predict_disease(image: str):
     # Load model
     model = load_model(model_path)
 
-    # Load image
-    img = np.array(
+    # Read the image file
+    contents = await image.read()
+
+    # Convert the image to numpy array
+    img = keras.preprocessing.image.img_to_array(
         keras.preprocessing.image.load_img(
-            image, target_size=(224, 224)
+            io.BytesIO(contents), target_size=(224, 224)
         )
     )
 
