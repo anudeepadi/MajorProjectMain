@@ -21,9 +21,7 @@ form.addEventListener('submit',async function(event) {
       const data = await response.json();
       console.log(data);
 
-      result.innerHTML = `<p>Plant Name : ${JSON.stringify(data.name)}</p>
-                           <p>Disease Name:${JSON.stringify(data.disease)}
-                           <p>Additional information: ${JSON.stringify(data.disease)}</p> `
+      result.innerHTML = `<p>Plant Name : ${JSON.stringify(data.name)}</p> `
     } catch (error) {
       console.error('Error:', error);
       result.innerHTML = 'An error occurred.';
