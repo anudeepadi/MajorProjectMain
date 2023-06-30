@@ -3,7 +3,11 @@ import json
 import numpy as np
 from tensorflow import keras
 from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, Request, Response, Form, HTTPException
+from twilio.twiml.messaging_response import MessagingResponse
+from twilio.request_validator import RequestValidator
 import argparse
+import logging
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Literal
 from pydantic import BaseModel, Field
@@ -17,10 +21,17 @@ from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
 from langchain.memory import ConversationBufferMemory
 from langchain.chat_models import ChatOpenAI
 
+# Load environment variables from .env file
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
 app = FastAPI()
 
-os.environ['OPENAI_API_KEY'] = "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"
+os.environ['OPENAI_API_KEY'] = "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"
 os.environ["WOLFRAM_ALPHA_APPID"] = "79UWTQ-Y5RVEG9A7Y"
+os.environ["TWILIO_AUTH_TOKEN"] = "2ee309591a6650d4dd1fb6a5ca9a9919"
 
 @app.get("/crop-info/{prediction_result}")
 def get_crop_info(prediction_result: str):
@@ -70,7 +81,7 @@ def get_crop_info(prediction_result: str):
         precaution = str(e)
         if precaution.startswith("Could not parse LLM output: `"):
             precaution = info.removeprefix("Could not parse LLM output: `").removesuffix("`")
-        else:
+        else:   
             raise Exception(str(e))
 
     response = {

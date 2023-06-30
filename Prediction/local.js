@@ -23,7 +23,7 @@ form.addEventListener('submit',async function(event) {
 
       result.innerHTML = `<p>Plant Name : ${JSON.stringify(data.name)}</p>
                            <p>Disease Name:${JSON.stringify(data.disease)}
-                           <p>Additional information: ${JSON.stringify(data.disease)}</p> `
+                           <p>Additional information: ${JSON.stringify(data.inference)}</p> `
     } catch (error) {
       console.error('Error:', error);
       result.innerHTML = 'An error occurred.';
