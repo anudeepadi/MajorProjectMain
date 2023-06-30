@@ -14,10 +14,16 @@
       </nav>
     
       <div class="container">
-        <form id="apiSubmit">
-          <input type="file" name="image" accept="image/*" required>
-          <button type="submit" class="btn btn-secondary">Check health</button>
+        <form id="apiSubmit" class="row g-3">
+          <div class="col-12">
+            <label for="image" class="form-label">Choose an image</label>
+            <input type="file" name="image" id="image" accept="image/*" required class="form-control">
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-secondary">Check health</button>
+          </div>
         </form>
+        
     
         <div class="result">
             <p>Add image to get result</p>
