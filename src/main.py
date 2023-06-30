@@ -29,9 +29,9 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
-os.environ['OPENAI_API_KEY'] = "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"
-os.environ["WOLFRAM_ALPHA_APPID"] = "79UWTQ-Y5RVEG9A7Y"
-os.environ["TWILIO_AUTH_TOKEN"] = "2ee309591a6650d4dd1fb6a5ca9a9919"
+openai.api_key = os.environ['OPENAI_API_KEY'] 
+os.environ["WOLFRAM_ALPHA_APPID"] 
+os.environ["TWILIO_AUTH_TOKEN"] 
 
 @app.get("/crop-info/{prediction_result}")
 def get_crop_info(prediction_result: str):

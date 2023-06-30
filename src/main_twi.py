@@ -10,9 +10,7 @@ app = FastAPI()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-os.environ['OPENAI_API_KEY'] = "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"
-os.environ["TWILIO_AUTH_TOKEN"] = "2ee309591a6650d4dd1fb6a5ca9a9919"
-
+openai.api_key = os.environ['OPENAI_API_KEY'] 
 
 validator = RequestValidator(os.environ["TWILIO_AUTH_TOKEN"])
 
