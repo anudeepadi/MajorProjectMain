@@ -1,97 +1,148 @@
-# Major Project
-## Steps to Install Packages
-To install the necessary packages for the social media project, follow these steps:
-1. Open the command prompt or terminal.
-2. Navigate to the "socialMedia" directory using the following command:
-```bash 
-cd socialMedia 
-```
-3. Initialize a new npm project by running the command:
+# Plant Disease Detection and Social Media Integration Project
+
+## 🌟 Overview
+A comprehensive full-stack application that combines plant disease detection using machine learning with social media features. This project was developed as part of the Major Project Computer Science and Engineering (CSE) coursework at Hyderabad Institute of Technology and Management (HITAM), Hyderabad.
+
+## 🚀 Features
+
+### Plant Disease Detection
+- Advanced image processing for plant disease identification
+- Machine learning model built with TensorFlow
+- Real-time disease detection through API endpoints
+- Support for multiple plant types and diseases
+- Detailed analysis reports
+
+### Social Media Integration
+- User authentication and profile management
+- Social networking features
+- Interactive user interface
+- Real-time updates and notifications
+- Content sharing capabilities
+
+### Additional Features
+- Interactive chat bot for user assistance
+- Order management system
+- Responsive web design
+- Secure API integration
+- Environment variable management for sensitive data
+
+## 🛠️ Technology Stack
+
+### Frontend
+- HTML5, CSS3, JavaScript
+- React.js for UI components
+- NPM for package management
+- Responsive design framework
+
+### Backend
+- Python FastAPI server
+- TensorFlow for ML models
+- SQLite/PostgreSQL for database
+- RESTful API architecture
+
+### ML/AI Components
+- TensorFlow for model training
+- scikit-learn for data processing
+- Pandas for data manipulation
+- Matplotlib for visualization
+- PIL for image processing
+
+### Development Tools
+- Git for version control
+- npm for package management
+- uvicorn for server deployment
+- Docker for containerization
+
+## 📦 Installation
+
+### 1. Social Media Component
 ```bash
+# Navigate to social media directory
+cd socialMedia
+
+# Initialize npm project
 npm init --y
-```
-4. Install the required packages by running the command:
-```bash
+
+# Install dependencies
 npm install
-```
-## Steps to Start the Project
-To start the social media project, follow these steps:
-1. Open the command prompt or terminal.
-2. Navigate to the "social media" directory using the following command:
-```bash
-cd social media
-```
-Start the project by running the command:
-```bash
+
+# Start the application
 npm start
 ```
-3. Open the "index.html" file in a Chrome browser to access the project.
-## Steps for Python Backend
-### To set up the Python backend for the project, make sure you have the following libraries installed: fastapi, python-multipart, tensorflow, numpy, matplotlib, and opendatasets.
 
-## Follow these steps:
-1. Install the required Python libraries using pip or any package manager of your choice.
-2. Navigate to the "Plant-diseases" folder in your command prompt or terminal.
-3. Enter the "src" directory using the following command:
+### 2. Python Backend Setup
 ```bash
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Navigate to src directory
 cd src
-```
-4. Run the following command to start the backend server:
-```bash
+
+# Start the FastAPI server
 uvicorn main:app --reload
 ```
-5. Add the images you want to analyze for plant diseases to the "src" folder.
-6. In the API endpoint provided in Swagger, paste the image path (e.g., image1.jpg).
-7. Download the plant disease dataset from the following link: Plant Disease Dataset
-8. Make sure to follow the necessary steps and requirements to run the project successfully.
 
-## Additional Steps
-## Setting Environment Variables for API Keys
+### 3. Environment Setup
+Create a `.env` file in the root directory with the following variables:
+```env
+OPENAI_API_KEY=your_openai_api_key
+WOLFRAM_ALPHA_APPID=your_wolfram_alpha_appid
+TWILIO_AUTH_TOKEN=your_twilio_auth_token
+```
 
-To set environment variables in order to access sensitive keys, you can follow these steps:
+## 📚 Project Structure
+```
+MajorProjectMain/
+├── Prediction/        # ML model and prediction logic
+├── assets/           # Static assets and resources
+├── orderPage/        # Order management system
+├── socialMedia/      # Social media component
+├── src/             # Backend source code
+│   └── main.py      # FastAPI application
+├── .env             # Environment variables
+├── .gitignore       # Git ignore rules
+├── index.html       # Main entry point
+├── requirements.txt  # Python dependencies
+└── README.md        # Project documentation
+```
 
-### Step 1: Create an `.env` file
+## 🔧 Configuration
+1. Plant Disease Dataset: Download from the provided link
+2. API Keys: Set up in `.env` file
+3. Database: Configure connection strings
+4. Server: Set up FastAPI configurations
+5. Frontend: Configure API endpoints
 
-Create a file in your project's root directory called `.env`. This file will store your environment variables.
+## 🚀 Usage
+1. Start the FastAPI backend server
+2. Launch the frontend application
+3. Access the system through `index.html`
+4. Upload plant images for disease detection
+5. Interact with social media features
 
-### Step 2: Assign values to your environment variables
+## 🤝 Contributing
+We welcome contributions! Please feel free to submit pull requests.
 
-Inside the `.env` file, add the key-value pairs for your environment variables. For example:
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-```plaintext
-OPENAI_API_KEY=your_openai_api_key_here
-WOLFRAM_ALPHA_APPID=your_wolfram_alpha_appid_here
-TWILIO_AUTH_TOKEN=your_twilio_auth_token_here
-Replace your_openai_api_key_here, your_wolfram_alpha_appid_here, and your_twilio_auth_token_here with your actual API keys.
+## 👥 Team Members
+- Adiraju Venkata Anudeep (4th Year CSE)
+- Bangaru Nihal (4th Year CSE)
+- Kala Aditya (4th Year CSE)
 
-Step 3: Load the environment variables in your code
-To access these environment variables in your code, you need to load them using a package like python-dotenv. Install the package by running the following command:
+## 📄 License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-bash
-Copy code
-pip install python-dotenv
-Once installed, you can load the environment variables in your code as follows:
+## 🙏 Acknowledgments
+- Hyderabad Institute of Technology and Management (HITAM)
+- Department of Computer Science and Engineering
+- Project Mentors and Advisors
+- Open Source Community
 
-python
-Copy code
-import os
-from dotenv import load_dotenv
-
-# Load environment variables from .env file
-load_dotenv()
-
-# Access the environment variables
-openai_api_key = os.environ['OPENAI_API_KEY']
-wolfram_alpha_appid = os.environ['WOLFRAM_ALPHA_APPID']
-twilio_auth_token = os.environ['TWILIO_AUTH_TOKEN']
-Now you can use openai_api_key, wolfram_alpha_appid, and twilio_auth_token variables in your code, which will contain the respective values from the environment variables you set in the .env file.
-
-Make sure to add the .env file to your project's .gitignore file to prevent accidentally committing sensitive information to version control.
-
-
-### Project done as a part of Major Project Computer Science and Engineering(CSE) Coursework at Hyderabad Institute of Technology and Management(HITAM), Hyderabad. By the following students:
-1. Adiraju Venkata Anudeep (4th Year CSE)
-2. Bangaru Nihal (4th Year CSE)
-3. Kala Aditya (4th Year CSE)
-
-#### If you want to contribute to this project, please feel free to do so. We would love to see your contributions.
+## 📞 Contact
+For any queries or suggestions, please reach out to the project maintainers:
+- GitHub: [@anudeepadi](https://github.com/anudeepadi)
